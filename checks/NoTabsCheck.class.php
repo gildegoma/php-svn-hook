@@ -3,7 +3,13 @@ require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'BasePreCommitCheck.class.php
 
 class NoTabsCheck extends BasePreCommitCheck {
   
-  public $extensionsToCheck = array('php', 'js', 'yml', 'html', 'htm');
+  public $extensionsToSkip = array(
+    'jpg', 'jpeg', 'png', 'gif'
+//    , 'zip', 'tar', 'gz', 'tgz'
+//    , 'odt' // more OpenDoc formats...
+//    , 'doc', 'docx', 'xls', 'xlsx', //more MS office formats...
+//    , 'jar', 'dll', 'so', 'exe'
+  );
   
   function getTitle(){
     return "Reject tabulation in files";
@@ -17,7 +23,7 @@ class NoTabsCheck extends BasePreCommitCheck {
     if ( $this->hasOption('allow-tabs') ){
       return;
     }
-    if ( ! in_array($this->getExtension($file), $this->extensionsToCheck) ){
+    if ( in_array($this->getExtension($file), $this->extensionsToSkip) ){
       return;
     }
     if ( ($pos = strpos($line, "\t")) !== false ){
