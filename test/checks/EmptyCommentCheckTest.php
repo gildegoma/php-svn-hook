@@ -2,7 +2,7 @@
 
 // Init lime
 include_once dirname(__FILE__).'/../lime/lime.php';
-$t = new lime_test(4, new lime_output_color());
+$t = new lime_test(6, new lime_output_color());
 
 // Load dependency
 include_once dirname(__FILE__).'/../../checks/EmptyCommentCheck.class.php';
@@ -13,6 +13,16 @@ $t->ok(!$c->fail(),"The check is not failling if there is a good commit msg");
   
 $c = new EmptyCommentCheck('toto');
 $c->runCheck(array());
-$t->ok($c->fail(),"The check fail when comment msg is too small");
+$t->ok($c->fail(),"The check fails when comment msg is too small");
 $t->is($c->renderErrorSummary(), "Commit message empty or too short", "A valid summary message is return");
 $t->is($c->renderErrorDetail(), "Minimum size is 5 characters", "A valid detail message is return");
+
+$c = new EmptyCommentCheck("--allow-tabs --no-ticket\n--any-other-option,--unusual-comma-separator");
+$c->runCheck(array());
+$t->ok($c->fail(), "The check fails when comment msg only contains php-svn-hook parameters");
+
+$c = new EmptyCommentCheck("Fix #430\n\n--allow-tabs");
+$c->runCheck(array());
+$t->ok(!$c->fail(), "The check is not failing when comment msg is long enough, even when parameters are ignored");
+
+

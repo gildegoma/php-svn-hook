@@ -12,7 +12,11 @@ class EmptyCommentCheck extends BasePreCommitCheck {
   }
   
   public function checkSvnComment($comment){
-    if (strlen($comment) < 5){
+    // Remove optional parameters (like --allow-tabs), 
+    // in order to check the size of a meaningful message 
+    $valuableComment = preg_replace('/(^|\s*)(--\S+)(\s*|$)/', '', $comment);
+
+    if (strlen($valuableComment) < 5){
       return "Minimum size is 5 characters";
     }
   }
