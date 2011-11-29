@@ -16,6 +16,9 @@ class EmptyCommentCheck extends BasePreCommitCheck {
     // in order to check the size of a meaningful message 
     $valuableComment = preg_replace('/(^|\s*)(--\S+)(\s*|$)/', '', $comment);
 
+    // Only consider Words in the count
+    $valuableComment = preg_replace('/\W+/', '', $valuableComment); 
+
     if (strlen($valuableComment) < 5){
       return "Minimum size is 5 characters";
     }
