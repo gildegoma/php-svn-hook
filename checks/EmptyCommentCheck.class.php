@@ -20,7 +20,7 @@ class EmptyCommentCheck extends BasePreCommitCheck {
     $valuableComment = preg_replace('/\W+/', '', $valuableComment); 
 
     if (strlen($valuableComment) < 5){
-      return "Minimum size is 5 characters";
+      return 'Commit message has been rejected (too short). Please provide more details about changes you want to commit.';
     }
   }
   
